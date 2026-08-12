@@ -12,3 +12,13 @@ model. The repository's eventual dissolution and the translator daemon's
 final name remain undesigned; do not imply either migration has landed.
 
 This repository is under fast development and constantly breaking.
+
+## Protos estate status
+
+Stack: incorrect-new
+Status: frozen reference
+Role: central storage topology
+
+No new code is accepted here. Do not add Cargo or Nix dependency edges to this repository.
+
+Existing edges may be observed, never extended.
