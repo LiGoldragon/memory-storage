@@ -15,9 +15,9 @@ path="src/bin/memory-storage.rs"
 kameo={git="https://github.com/LiGoldragon/kameo.git",rev="f491b45d7dcb55e5837eddde3d5d7ca8ceaa9f01",default-features=false,features=["macros"]}
 name-table={git="https://github.com/LiGoldragon/name-table.git",rev="c3237f77c087e6feab49d6cf34971cebc14a11e6"}
 rkyv={version="0.8",features=["bytecheck"]}
-memory-engine={git="https://github.com/LiGoldragon/memory-engine.git",rev="76a47c080579d43814a46b0f4bb92f6456e3568d"}
+memory-engine={git="https://github.com/LiGoldragon/memory-engine.git",rev="41f832fee73687f92bf0c2b0615bad281f996912"}
 signal-frame={git="https://github.com/LiGoldragon/signal-frame.git",rev="f46872e7e8edae5264c892443d415a273b231234",default-features=false}
-signal-memory-storage={git="https://github.com/LiGoldragon/signal-memory-storage.git",rev="c39e62c245ab044dc8369f50066e8563ed1ee526"}
+signal-memory-storage={git="https://github.com/LiGoldragon/signal-memory-storage.git",rev="939f17989571ca84e2c383e1b96f31febfee334a"}
 tokio={version="1",features=["macros","rt-multi-thread","net","io-util","sync","time"]}
 thiserror="2"
 [dev-dependencies]

@@ -374,7 +374,7 @@ dependencies = [
 [[package]]
 name = "memory-engine"
 version = "0.18.0"
-source = "git+https://github.com/LiGoldragon/memory-engine.git?rev=76a47c080579d43814a46b0f4bb92f6456e3568d#76a47c080579d43814a46b0f4bb92f6456e3568d"
+source = "git+https://github.com/LiGoldragon/memory-engine.git?rev=41f832fee73687f92bf0c2b0615bad281f996912#41f832fee73687f92bf0c2b0615bad281f996912"
 dependencies = [
  "blake3",
  "memory",
@@ -698,7 +698,7 @@ dependencies = [
 [[package]]
 name = "signal-memory-storage"
 version = "0.3.0"
-source = "git+https://github.com/LiGoldragon/signal-memory-storage.git?rev=c39e62c245ab044dc8369f50066e8563ed1ee526#c39e62c245ab044dc8369f50066e8563ed1ee526"
+source = "git+https://github.com/LiGoldragon/signal-memory-storage.git?rev=939f17989571ca84e2c383e1b96f31febfee334a#939f17989571ca84e2c383e1b96f31febfee334a"
 dependencies = [
  "content-identity 0.3.0",
  "core-logos",

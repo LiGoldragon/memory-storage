@@ -41,7 +41,9 @@ async fn durable_single_writer_versions_and_recovers() {
 #[tokio::test]
 async fn committed_documents_are_pushed_without_polling() {
     let dir = tempfile::tempdir().unwrap();
-    let runtime = Runtime::open(&dir.path().join("push.memory")).await.unwrap();
+    let runtime = Runtime::open(&dir.path().join("push.memory"))
+        .await
+        .unwrap();
     let mut events = runtime.subscribe();
     let key = DocumentKey {
         scope: FixtureScope(1),
