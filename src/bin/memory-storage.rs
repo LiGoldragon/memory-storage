@@ -1,9 +1,9 @@
 use std::{env, path::PathBuf};
 
-use sema_storage::{NegotiatedWire, Runtime};
-use signal_sema_storage::{
+use memory_storage::{NegotiatedWire, Runtime};
+use signal_memory_storage::{
     DocumentKey, DocumentKind, DocumentPayload, FamilyDeclaration, FixtureScope, FrameMessage,
-    NameTableBytes, Reply, Request, SemaStorageRoot, SlotIdentifier, Version, Wire,
+    NameTableBytes, Reply, Request, MemoryStorageRoot, SlotIdentifier, Version, Wire,
 };
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
@@ -18,12 +18,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let socket = PathBuf::from(
             arguments
                 .next()
-                .unwrap_or_else(|| "/tmp/new-language-engine/sema.sock".into()),
+                .unwrap_or_else(|| "/tmp/new-language-engine/memory.sock".into()),
         );
         let database = PathBuf::from(
             arguments
                 .next()
-                .unwrap_or_else(|| "/tmp/new-language-engine/state.sema".into()),
+                .unwrap_or_else(|| "/tmp/new-language-engine/state.memory".into()),
         );
         if let Some(parent) = socket.parent() {
             std::fs::create_dir_all(parent)?;
@@ -59,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .transpose()?,
         },
         "hash-fetch" => Request::HashFetch {
-            hash: signal_sema_storage::ContentHash(parse_hash(
+            hash: signal_memory_storage::ContentHash(parse_hash(
                 &arguments.next().ok_or("hash")?,
             )?),
         },
@@ -70,7 +70,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             scope: FixtureScope(parse(&mut arguments, "scope")?),
             count: parse(&mut arguments, "count")?,
         },
-        "store-sema-family" => {
+        "store-memory-family" => {
             let scope = FixtureScope(parse(&mut arguments, "scope")?);
             let slot = SlotIdentifier(parse(&mut arguments, "slot")?);
             let family = name_table::Identifier::new(parse(&mut arguments, "family id")?);
@@ -78,10 +78,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Request::Store {
                 key: DocumentKey {
                     scope,
-                    kind: DocumentKind::SemaStorage,
+                    kind: DocumentKind::MemoryStorage,
                     slot,
                 },
-                payload: DocumentPayload::SemaStorage(SemaStorageRoot {
+                payload: DocumentPayload::MemoryStorage(MemoryStorageRoot {
                     families: vec![FamilyDeclaration {
                         family,
                         layout_version,
@@ -97,7 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             };
             return subscribe(&socket, request).await;
         }
-        _ => return Err("usage: sema-storage daemon [socket] [database] | list|fetch|hash-fetch|snapshot|allocate|store-sema-family|subscribe <socket> ...".into()),
+        _ => return Err("usage: memory-storage daemon [socket] [database] | list|fetch|hash-fetch|snapshot|allocate|store-memory-family|subscribe <socket> ...".into()),
     };
     println!("{:?}", exchange(&socket, &request).await?);
     Ok(())
@@ -121,7 +121,7 @@ fn parse_kind(value: &str) -> Result<DocumentKind, Box<dyn std::error::Error>> {
         "type-schema" => DocumentKind::TypeSchema,
         "signal-contract" => DocumentKind::SignalContract,
         "nexus-runtime" => DocumentKind::NexusRuntime,
-        "sema-storage" => DocumentKind::SemaStorage,
+        "memory-storage" => DocumentKind::MemoryStorage,
         "nomos" => DocumentKind::Nomos,
         "logos" => DocumentKind::Logos,
         _ => return Err(format!("unknown document kind: {value}").into()),

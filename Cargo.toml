@@ -1,23 +1,23 @@
 [package]
-name="sema-storage"
+name="memory-storage"
 version="0.1.0"
 edition="2024"
 rust-version="1.89"
 license="MIT OR Apache-2.0"
-repository="https://github.com/LiGoldragon/sema-storage"
-description="Central durable Sema daemon for the minimal language engine"
+repository="https://github.com/LiGoldragon/memory-storage"
+description="Central durable Memory daemon for the minimal language engine"
 [lib]
-name="sema_storage"
+name="memory_storage"
 [[bin]]
-name="sema-storage"
-path="src/bin/sema-storage.rs"
+name="memory-storage"
+path="src/bin/memory-storage.rs"
 [dependencies]
 kameo={git="https://github.com/LiGoldragon/kameo.git",rev="f491b45d7dcb55e5837eddde3d5d7ca8ceaa9f01",default-features=false,features=["macros"]}
 name-table={git="https://github.com/LiGoldragon/name-table.git",rev="c3237f77c087e6feab49d6cf34971cebc14a11e6"}
 rkyv={version="0.8",features=["bytecheck"]}
-sema-engine={git="https://github.com/LiGoldragon/sema-engine.git",rev="93a6b5f063292e000a7bf395fdd5b46e3e943068"}
+memory-engine={git="https://github.com/LiGoldragon/memory-engine.git",rev="76a47c080579d43814a46b0f4bb92f6456e3568d"}
 signal-frame={git="https://github.com/LiGoldragon/signal-frame.git",rev="f46872e7e8edae5264c892443d415a273b231234",default-features=false}
-signal-sema-storage={git="https://github.com/LiGoldragon/signal-sema-storage.git",rev="31ab48608a3c2eab0733dcb16a3351251a70789d"}
+signal-memory-storage={git="https://github.com/LiGoldragon/signal-memory-storage.git",rev="c39e62c245ab044dc8369f50066e8563ed1ee526"}
 tokio={version="1",features=["macros","rt-multi-thread","net","io-util","sync","time"]}
 thiserror="2"
 [dev-dependencies]

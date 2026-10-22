@@ -1,15 +1,15 @@
-# sema-storage architecture
+# memory-storage architecture
 
 ## Current implementation: wired legacy topology
 
 This repository currently implements a standalone central daemon. Requests
-traverse state-bearing Kameo actors in Signal → Nexus → SEMA order; SEMA owns
-one `sema_engine::Engine`, and Nexus fans committed changes to push
+traverse state-bearing Kameo actors in Signal → Nexus → MEMORY order; MEMORY owns
+one `memory_engine::Engine`, and Nexus fans committed changes to push
 subscribers. Component daemons currently reach it through typed sockets.
 
 That is the wired legacy topology, not the approved architecture. The
 approved target has every component daemon stateful and owning its own
-embedded sema database. A separate small translator daemon is authoritative
+embedded memory database. A separate small translator daemon is authoritative
 only for shared naming and encodedID allocation. It does not become a central
 store for Ethos, Nomos, or Logos documents.
 

@@ -1,12 +1,12 @@
-use sema_storage::Runtime;
-use signal_sema_storage::{
+use memory_storage::Runtime;
+use signal_memory_storage::{
     DocumentKey, DocumentKind, DocumentPayload, FixtureScope, NameTableBytes, Reply, Request,
     SlotIdentifier,
 };
 #[tokio::test]
 async fn durable_single_writer_versions_and_recovers() {
     let dir = tempfile::tempdir().unwrap();
-    let path = dir.path().join("isolated.sema");
+    let path = dir.path().join("isolated.memory");
     let key = DocumentKey {
         scope: FixtureScope(1),
         kind: DocumentKind::Logos,
@@ -41,7 +41,7 @@ async fn durable_single_writer_versions_and_recovers() {
 #[tokio::test]
 async fn committed_documents_are_pushed_without_polling() {
     let dir = tempfile::tempdir().unwrap();
-    let runtime = Runtime::open(&dir.path().join("push.sema")).await.unwrap();
+    let runtime = Runtime::open(&dir.path().join("push.memory")).await.unwrap();
     let mut events = runtime.subscribe();
     let key = DocumentKey {
         scope: FixtureScope(1),
@@ -66,7 +66,7 @@ async fn committed_documents_are_pushed_without_polling() {
 #[tokio::test]
 async fn fixture_allocator_is_durable() {
     let dir = tempfile::tempdir().unwrap();
-    let runtime = Runtime::open(&dir.path().join("ids.sema")).await.unwrap();
+    let runtime = Runtime::open(&dir.path().join("ids.memory")).await.unwrap();
     let reply = runtime
         .request(Request::AllocateIdentifiers {
             scope: FixtureScope(7),

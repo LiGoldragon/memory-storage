@@ -4,13 +4,13 @@ use kameo::{
     message::{Context, Message},
 };
 use rkyv::{Archive, Deserialize, Serialize};
-use sema_engine::{
+use memory_engine::{
     Assertion, CommitRequest, Engine, EngineOpen, EngineRecord, FamilyName, Mutation, QueryPlan,
     RecordKey, SchemaHash, SchemaVersion, TableDescriptor, TableName, TableReference,
     VersionedStoreName, VersioningPolicy,
 };
 use signal_frame::{ProtocolVersion, SIGNAL_FRAME_PROTOCOL_VERSION};
-use signal_sema_storage::{
+use signal_memory_storage::{
     BindOutcome, BoundIdentities, ChangeEvent, DeclaredIdentity, DeclaredKey, DeclaredShape,
     DocumentKey, DocumentKind, FixtureScope, IdentifierBlock, IdentityAssignment, IdentityIntent,
     MintedUniverse, Rejection, Reply, Request, SchemaWholeHandle, SlotSummary, Snapshot,
@@ -74,7 +74,7 @@ fn kind_tag(kind: DocumentKind) -> u8 {
         DocumentKind::TypeSchema => 0,
         DocumentKind::SignalContract => 1,
         DocumentKind::NexusRuntime => 2,
-        DocumentKind::SemaStorage => 3,
+        DocumentKind::MemoryStorage => 3,
         DocumentKind::Nomos => 4,
         DocumentKind::Logos => 5,
     }
@@ -237,12 +237,12 @@ struct TypeBinding {
     shape: DeclaredShape,
 }
 
-pub struct SemaPlane {
+pub struct MemoryPlane {
     engine: Engine,
     records: TableReference<StorageRecord>,
     authority: TableReference<AuthorityRecord>,
 }
-impl SemaPlane {
+impl MemoryPlane {
     pub fn open(path: &Path) -> Result<Self> {
         let mut engine = Engine::open(
             EngineOpen::new(path, SchemaVersion::new(1)).with_versioning(VersioningPolicy::new(
@@ -494,7 +494,7 @@ impl SemaPlane {
         }
     }
 }
-impl Actor for SemaPlane {
+impl Actor for MemoryPlane {
     type Args = Self;
     type Error = Infallible;
     async fn on_start(
@@ -505,7 +505,7 @@ impl Actor for SemaPlane {
     }
 }
 pub struct Execute(pub Request);
-impl Message<Execute> for SemaPlane {
+impl Message<Execute> for MemoryPlane {
     type Reply = Result<(Reply, Option<ChangeEvent>)>;
     async fn handle(&mut self, msg: Execute, _: &mut Context<Self, Self::Reply>) -> Self::Reply {
         self.dispatch(msg.0)
@@ -513,14 +513,14 @@ impl Message<Execute> for SemaPlane {
 }
 
 pub struct NexusPlane {
-    sema: ActorRef<SemaPlane>,
+    memory: ActorRef<MemoryPlane>,
     events: broadcast::Sender<ChangeEvent>,
     dispatched: u64,
 }
 impl NexusPlane {
-    fn new(sema: ActorRef<SemaPlane>, events: broadcast::Sender<ChangeEvent>) -> Self {
+    fn new(memory: ActorRef<MemoryPlane>, events: broadcast::Sender<ChangeEvent>) -> Self {
         Self {
-            sema,
+            memory,
             events,
             dispatched: 0,
         }
@@ -541,7 +541,7 @@ impl Message<Execute> for NexusPlane {
     async fn handle(&mut self, msg: Execute, _: &mut Context<Self, Self::Reply>) -> Self::Reply {
         self.dispatched += 1;
         let (reply, event) = self
-            .sema
+            .memory
             .ask(msg)
             .send()
             .await
@@ -588,19 +588,19 @@ impl Message<Execute> for SignalPlane {
 pub struct Runtime {
     signal: ActorRef<SignalPlane>,
     nexus: ActorRef<NexusPlane>,
-    sema: ActorRef<SemaPlane>,
+    memory: ActorRef<MemoryPlane>,
     events: broadcast::Sender<ChangeEvent>,
 }
 impl Runtime {
     pub async fn open(path: &Path) -> Result<Self> {
-        let sema = SemaPlane::spawn(SemaPlane::open(path)?);
+        let memory = MemoryPlane::spawn(MemoryPlane::open(path)?);
         let (events, _) = broadcast::channel(64);
-        let nexus = NexusPlane::spawn(NexusPlane::new(sema.clone(), events.clone()));
+        let nexus = NexusPlane::spawn(NexusPlane::new(memory.clone(), events.clone()));
         let signal = SignalPlane::spawn(SignalPlane::new(nexus.clone()));
         Ok(Self {
             signal,
             nexus,
-            sema,
+            memory,
             events,
         })
     }
@@ -625,11 +625,11 @@ impl Runtime {
             .await
             .map_err(|e| Error::Actor(e.to_string()))?;
         self.nexus.wait_for_shutdown().await;
-        self.sema
+        self.memory
             .stop_gracefully()
             .await
             .map_err(|e| Error::Actor(e.to_string()))?;
-        self.sema.wait_for_shutdown().await;
+        self.memory.wait_for_shutdown().await;
         Ok(())
     }
 }

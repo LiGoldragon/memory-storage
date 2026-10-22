@@ -1,6 +1,6 @@
-use sema_storage::NegotiatedWire;
+use memory_storage::NegotiatedWire;
 use signal_frame::{ProtocolVersion, SIGNAL_FRAME_PROTOCOL_VERSION};
-use signal_sema_storage::Rejection;
+use signal_memory_storage::Rejection;
 
 #[test]
 fn current_wire_version_is_served_and_incompatible_is_rejected() {

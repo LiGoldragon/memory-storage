@@ -10,8 +10,8 @@
 //!   existing identity for a structurally different shape is rejected with a typed error.
 //! - Durability: minted universes are never reused, and a restart re-issues nothing.
 
-use sema_storage::Runtime;
-use signal_sema_storage::{
+use memory_storage::Runtime;
+use signal_memory_storage::{
     BindOutcome, DeclaredIdentity, DeclaredKey, DeclaredShape, IdentityIntent, MintedUniverse,
     Rejection, Reply, Request, SchemaWholeHandle, TypeIdentity,
 };
@@ -66,7 +66,7 @@ fn universe(reply: &Reply) -> MintedUniverse {
 #[tokio::test]
 async fn same_declared_schema_binds_identical_identities_across_restart() {
     let dir = tempfile::tempdir().unwrap();
-    let path = dir.path().join("authority.sema");
+    let path = dir.path().join("authority.memory");
 
     let first = {
         let runtime = Runtime::open(&path).await.unwrap();
@@ -116,7 +116,7 @@ async fn same_declared_schema_binds_identical_identities_across_restart() {
 #[tokio::test]
 async fn carried_declarations_are_stable_and_only_new_ones_mint() {
     let dir = tempfile::tempdir().unwrap();
-    let runtime = Runtime::open(&dir.path().join("authority.sema"))
+    let runtime = Runtime::open(&dir.path().join("authority.memory"))
         .await
         .unwrap();
 
@@ -150,7 +150,7 @@ async fn carried_declarations_are_stable_and_only_new_ones_mint() {
 #[tokio::test]
 async fn rebinding_an_identity_to_a_different_shape_is_rejected() {
     let dir = tempfile::tempdir().unwrap();
-    let runtime = Runtime::open(&dir.path().join("authority.sema"))
+    let runtime = Runtime::open(&dir.path().join("authority.memory"))
         .await
         .unwrap();
 
@@ -188,7 +188,7 @@ async fn rebinding_an_identity_to_a_different_shape_is_rejected() {
 #[tokio::test]
 async fn distinct_wholes_mint_distinct_universes_across_restart() {
     let dir = tempfile::tempdir().unwrap();
-    let path = dir.path().join("authority.sema");
+    let path = dir.path().join("authority.memory");
 
     let first = {
         let runtime = Runtime::open(&path).await.unwrap();
@@ -214,7 +214,7 @@ async fn distinct_wholes_mint_distinct_universes_across_restart() {
 #[tokio::test]
 async fn empty_declaration_set_is_rejected() {
     let dir = tempfile::tempdir().unwrap();
-    let runtime = Runtime::open(&dir.path().join("authority.sema"))
+    let runtime = Runtime::open(&dir.path().join("authority.memory"))
         .await
         .unwrap();
     let reply = bind(&runtime, "empty", Vec::new()).await;

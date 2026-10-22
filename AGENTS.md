@@ -1,8 +1,8 @@
 # Agent guidance
 
-Treat this repository's central Signal → Nexus → SEMA actor and socket
+Treat this repository's central Signal → Nexus → MEMORY actor and socket
 topology as wired legacy behavior, not design law. The approved target has
-each component daemon owning its own embedded sema database. A separate small
+each component daemon owning its own embedded memory database. A separate small
 translator daemon is authoritative only for shared naming and encodedID
 allocation.
 
