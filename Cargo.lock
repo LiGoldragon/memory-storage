@@ -93,16 +93,6 @@ checksum = "3d52eff69cd5e647efe296129160853a42795992097e8af39800e1060caeea9b"
 
 [[package]]
 name = "content-identity"
-version = "0.1.0"
-source = "git+https://github.com/LiGoldragon/content-identity.git?rev=6cc0408cdb96f174cc8fdf6ca23420038de28450#6cc0408cdb96f174cc8fdf6ca23420038de28450"
-dependencies = [
- "blake3",
- "rkyv",
- "thiserror",
-]
-
-[[package]]
-name = "content-identity"
 version = "0.3.0"
 source = "git+https://github.com/LiGoldragon/content-identity.git?rev=24b43bae5d9748b0e7f679c6ec9f85a643c4d36a#24b43bae5d9748b0e7f679c6ec9f85a643c4d36a"
 dependencies = [
@@ -128,7 +118,7 @@ source = "git+https://github.com/LiGoldragon/core-logos.git?rev=abee4036fbeb58c7
 dependencies = [
  "content-identity 0.3.0",
  "content-identity 0.5.0",
- "name-table 0.1.0 (git+https://github.com/LiGoldragon/name-table.git?rev=196610e2907687dcb8dbd0d2dfaafe4aefd9fa27)",
+ "name-table 0.1.0",
  "name-table 0.3.0",
  "protos",
  "raw-discovery",
@@ -374,7 +364,7 @@ dependencies = [
 [[package]]
 name = "memory-engine"
 version = "0.18.0"
-source = "git+https://github.com/LiGoldragon/memory-engine.git?rev=41f832fee73687f92bf0c2b0615bad281f996912#41f832fee73687f92bf0c2b0615bad281f996912"
+source = "git+https://github.com/LiGoldragon/memory-engine.git?rev=abf9d85166e22440440baba03358913458905b8d#abf9d85166e22440440baba03358913458905b8d"
 dependencies = [
  "blake3",
  "memory",
@@ -389,9 +379,9 @@ version = "0.1.0"
 dependencies = [
  "kameo",
  "memory-engine",
- "name-table 0.1.0 (git+https://github.com/LiGoldragon/name-table.git?rev=c3237f77c087e6feab49d6cf34971cebc14a11e6)",
+ "name-table 0.1.0",
  "rkyv",
- "signal-frame 0.3.0",
+ "signal-frame",
  "signal-memory-storage",
  "tempfile",
  "thiserror",
@@ -441,16 +431,6 @@ dependencies = [
 
 [[package]]
 name = "name-table"
-version = "0.1.0"
-source = "git+https://github.com/LiGoldragon/name-table.git?rev=c3237f77c087e6feab49d6cf34971cebc14a11e6#c3237f77c087e6feab49d6cf34971cebc14a11e6"
-dependencies = [
- "content-identity 0.1.0",
- "rkyv",
- "thiserror",
-]
-
-[[package]]
-name = "name-table"
 version = "0.3.0"
 source = "git+https://github.com/LiGoldragon/name-table.git?rev=a22f48d8040ab9235f3552ad8654ff8e27b8157d#a22f48d8040ab9235f3552ad8654ff8e27b8157d"
 dependencies = [
@@ -493,7 +473,7 @@ source = "git+https://github.com/LiGoldragon/protos.git?rev=65e7c6d4692a40e1c49d
 dependencies = [
  "content-identity 0.5.0",
  "rkyv",
- "signal-frame 0.4.0",
+ "signal-frame",
 ]
 
 [[package]]
@@ -655,23 +635,12 @@ checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
 
 [[package]]
 name = "signal-frame"
-version = "0.3.0"
-source = "git+https://github.com/LiGoldragon/signal-frame.git?rev=f46872e7e8edae5264c892443d415a273b231234#f46872e7e8edae5264c892443d415a273b231234"
-dependencies = [
- "paste",
- "rkyv",
- "signal-frame-macros 0.1.1 (git+https://github.com/LiGoldragon/signal-frame.git?rev=f46872e7e8edae5264c892443d415a273b231234)",
- "thiserror",
-]
-
-[[package]]
-name = "signal-frame"
 version = "0.4.0"
 source = "git+https://github.com/LiGoldragon/signal-frame.git?rev=0786fbe8caf27552afcdd5deb85bc82ec6088337#0786fbe8caf27552afcdd5deb85bc82ec6088337"
 dependencies = [
  "paste",
  "rkyv",
- "signal-frame-macros 0.1.1 (git+https://github.com/LiGoldragon/signal-frame.git?rev=0786fbe8caf27552afcdd5deb85bc82ec6088337)",
+ "signal-frame-macros",
  "thiserror",
 ]
 
@@ -679,16 +648,6 @@ dependencies = [
 name = "signal-frame-macros"
 version = "0.1.1"
 source = "git+https://github.com/LiGoldragon/signal-frame.git?rev=0786fbe8caf27552afcdd5deb85bc82ec6088337#0786fbe8caf27552afcdd5deb85bc82ec6088337"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "signal-frame-macros"
-version = "0.1.1"
-source = "git+https://github.com/LiGoldragon/signal-frame.git?rev=f46872e7e8edae5264c892443d415a273b231234#f46872e7e8edae5264c892443d415a273b231234"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -702,9 +661,9 @@ source = "git+https://github.com/LiGoldragon/signal-memory-storage.git?rev=939f1
 dependencies = [
  "content-identity 0.3.0",
  "core-logos",
- "name-table 0.1.0 (git+https://github.com/LiGoldragon/name-table.git?rev=196610e2907687dcb8dbd0d2dfaafe4aefd9fa27)",
+ "name-table 0.1.0",
  "rkyv",
- "signal-frame 0.4.0",
+ "signal-frame",
  "signal-sema-translator",
  "thiserror",
 ]
@@ -727,7 +686,7 @@ dependencies = [
  "name-table 0.3.0",
  "protos",
  "rkyv",
- "signal-frame 0.4.0",
+ "signal-frame",
  "thiserror",
 ]
 

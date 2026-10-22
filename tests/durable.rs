@@ -1,7 +1,7 @@
 use memory_storage::Runtime;
 use signal_memory_storage::{
-    DocumentKey, DocumentKind, DocumentPayload, FixtureScope, NameTableBytes, Reply, Request,
-    SlotIdentifier,
+    DocumentKey, DocumentKind, DocumentPayload, FixtureScope, MemoryStorageRoot, NameTableBytes,
+    Reply, Request, SlotIdentifier,
 };
 #[tokio::test]
 async fn durable_single_writer_versions_and_recovers() {
@@ -9,13 +9,13 @@ async fn durable_single_writer_versions_and_recovers() {
     let path = dir.path().join("isolated.memory");
     let key = DocumentKey {
         scope: FixtureScope(1),
-        kind: DocumentKind::Logos,
+        kind: DocumentKind::MemoryStorage,
         slot: SlotIdentifier(1),
     };
-    let payload = DocumentPayload::Logos {
-        items: vec![],
+    let payload = DocumentPayload::MemoryStorage(MemoryStorageRoot {
+        families: vec![],
         names: NameTableBytes(vec![]),
-    };
+    });
     let runtime = Runtime::open(&path).await.unwrap();
     assert!(matches!(
         runtime
@@ -47,13 +47,13 @@ async fn committed_documents_are_pushed_without_polling() {
     let mut events = runtime.subscribe();
     let key = DocumentKey {
         scope: FixtureScope(1),
-        kind: DocumentKind::Logos,
+        kind: DocumentKind::MemoryStorage,
         slot: SlotIdentifier(9),
     };
-    let payload = DocumentPayload::Logos {
-        items: vec![],
+    let payload = DocumentPayload::MemoryStorage(MemoryStorageRoot {
+        families: vec![],
         names: NameTableBytes(vec![]),
-    };
+    });
     runtime
         .request(Request::Store { key, payload })
         .await
